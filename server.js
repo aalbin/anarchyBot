@@ -3,6 +3,16 @@ require('dotenv').load();
 const schedule = require('node-schedule');
 const request = require('request');
 const targets = JSON.parse(process.env.targets);
+const http = require('http');
+
+var glob_next_date;
+
+// setup callback showing next scheduled notice
+var server = http.createServer(function (req, res) {
+    res.writeHead(200);
+    res.end(glob_next_date + '');
+});
+server.listen(8080);
 
 // start scheduling loop
 // if debug, send once on startup
@@ -26,6 +36,7 @@ function job(skipSend) {
     }
 
     var nextDate = getNextDate();
+    glob_next_date = nextDate;
     console.log('scheduling next event at ' + nextDate);
     schedule.scheduleJob(nextDate, () => job());
 }
