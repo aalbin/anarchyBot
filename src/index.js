@@ -5,7 +5,8 @@ const request = require('request');
 const targets = JSON.parse(process.env.targets);
 
 // start scheduling loop
-job(true);
+// if debug, send once on startup
+job(!process.env.debug);
 
 function job(skipSend) {
     console.log(skipSend);
