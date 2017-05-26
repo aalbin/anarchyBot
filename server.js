@@ -2,7 +2,7 @@ require('dotenv').load();
 
 const schedule = require('node-schedule');
 const request = require('request');
-const targets = JSON.parse(process.env.targets);
+const targets = JSON.parse(process.env.anarki_targets);
 const http = require('http');
 
 var glob_next_date;
@@ -12,11 +12,11 @@ var server = http.createServer(function (req, res) {
     res.writeHead(200);
     res.end(glob_next_date + '');
 });
-server.listen(8080);
+server.listen(1337);
 
 // start scheduling loop
 // if debug, send once on startup
-job(!process.env.debug);
+job(!process.env.anarki_debug);
 
 function job(skipSend) {
     console.log(skipSend);
@@ -46,8 +46,8 @@ function getSlackForm(target) {
         form: {
             token: target.token,
             channel: target.channel,
-            username: process.env.botname,
-            text: process.env.message,
+            username: process.env.anarki_botname,
+            text: process.env.anarki_message,
             link_names: true
         }
     };
@@ -65,6 +65,6 @@ function getNextDate() {
 function tomorrow() {
     var d = new Date();
     d.setDate(d.getDate() + 1);
-    d.setUTCHours(9, 0, 0, 0);
+    d.setHours(10, 0, 0, 0);
     return d;
 }
