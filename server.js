@@ -41,30 +41,27 @@ function job(skipSend) {
     schedule.scheduleJob(nextDate, () => job());
 }
 
-function getSlackForm(target) {
+function getSlackForm(target, date) {
     return {
         form: {
             token: target.token,
             channel: target.channel,
             username: process.env.anarki_botname,
-            text: process.env.anarki_message,
+            text: new Date().getDay() == 5 ? process.env.anarki_fridaymessage : process.env.anarki_message,
             link_names: true
         }
     };
 }
 
 function getNextDate() {
-    var diff = Math.floor(Math.random() * 28800000) + 1000 // add between 1 second and 8:00:01 hours   // 
-    var now = new Date();
-    var nextDate = new Date(now.getTime() + diff);
-    if (nextDate.getHours() >= 18 || nextDate.getDate() > now.getDate())
-        nextDate = new Date(tomorrow().getTime() + diff);
+    var diff = Math.floor(Math.random() * 28800000) // add between 0 seconds and 8 hours
+    var nextDate = new Date(tomorrow().getTime() + diff);
     return nextDate;
 }
 
 function tomorrow() {
     var d = new Date();
-    d.setDate(d.getDate() + 1);
-    d.setHours(10, 0, 0, 0);
+    d.setDate(d.getDate() + d.getDay() == 5 ? 3 : 1);   // skip weekends
+    d.setHours(9, 0, 0, 0);
     return d;
 }
