@@ -1,4 +1,4 @@
-require('dotenv').load();
+require('dotenv').load({ path: __dirname + '/.env' });
 
 const schedule = require('node-schedule');
 const request = require('request');
@@ -61,7 +61,7 @@ function getNextDate() {
 
 function tomorrow() {
     var d = new Date();
-    d.setDate(d.getDate() + d.getDay() == 5 ? 3 : 1);   // skip weekends
+    d.setDate(d.getDate() + (d.getDay() == 5 ? 3 : 1));   // skip weekends
     d.setHours(9, 0, 0, 0);
     return d;
 }
